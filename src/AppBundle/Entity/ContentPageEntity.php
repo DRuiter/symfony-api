@@ -6,7 +6,7 @@ namespace AppBundle\Entity;
  * @Entity
  * @Table(name="contentpages")
  */
-class ContentPage
+class ContentPageEntity
 {
     /**
      * @var integer
@@ -37,27 +37,45 @@ class ContentPage
      * @return integer
      */
     public function getID(){
-        return $this->$id;
+        return $this->id;
     }
 
     /**
      * @return string
      */
     public function getTitle(){
-        return $this->$title;
+        return $this->title;
+    }
+
+    /**
+     * @return self
+     */
+    public function setTitle(string $title){
+        $this->title = $title;
+
+        return $this;
     }
 
     /**
      * @return string
      */
     public function getBody(){
-        return $this->$body;
+        return $this->body;
+    }
+
+    /**
+     * @return self
+     */
+    public function setBody(string $body){
+        $this->body = $body;
+        
+        return $this;
     }
 
     /**
      * @return string
      */
     public function getUrlPath(){
-        return str_replace(' ', '-', strtolower($this->$title));
+        return str_replace(' ', '-', strtolower($this->title));
     }
 }

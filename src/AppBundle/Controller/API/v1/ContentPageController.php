@@ -10,13 +10,13 @@ use FOS\RestBundle\Controller\Annotations\Get;
 
 use JMS\Serializer\SerializationContext;
 
-class UsersController extends FOSRestController
+class ContentPageController extends FOSRestController
 {
     /**
-     * @Get("/api/v1.0/users/")
+     * @Get("/api/v1.0/contentpages/")
      * @return array
      */
-    public function getAllUsers(Request $request){
+    public function getAllContentPages(Request $request){
         $data = array(1,2,3,4, 'wat' => 'wut');
         $view = $this
                     ->view($data, 200)
@@ -26,9 +26,9 @@ class UsersController extends FOSRestController
     }
 
     /**
-     * @Get("/api/v1.0/user/{id}")
+     * @Get("/api/v1.0/contentpage/{id}")
      */
-    public function getUser(Request $request, $id){
+    public function getContentPage(Request $request, $id){
         return new Response('<html><body>'.$slug.'</body></html>');
     }
 }

@@ -6,7 +6,7 @@ namespace AppBundle\Entity;
  * @Entity
  * @Table(name="users")
  */
-class User
+class UserEntity
 {
     /**
      * @var integer
@@ -55,25 +55,25 @@ class User
     protected $passwordHash;
 
     /**
-     * @return string
+     * @return self
      */
-    public function setPassword(String $password){
-        if(!isset($this->$salt)){
+    public function setPassword($password){
+        if(!isset($this->salt)){
             $salt = $this->generateSalt();
         } else {
-            $salt = $this->$salt;
+            $salt = $this->salt;
         }
 
         $this->passwordHash = openssl_digest($password.$salt, 'sha512');
 
-        return $this->$passwordHash;
+        return $this;
     }
 
     /**
      * @return string
      */
     public function generateSalt(){
-        function generateRandomString(Integer $length) {
+        function generateRandomString($length) {
             $characters         = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $charactersLength   = strlen($characters);
             $randomString       = '';
@@ -85,105 +85,106 @@ class User
             return $randomString;
         }
 
-        $this->$salt = generateRandomString(16);
+        $salt = generateRandomString(16);
+        $this->salt = $salt;
 
-        return $this->$salt;
+        return $this->salt;
     }
 
-    public function checkPassword(String $password){
-        $salt = $this->$salt;
+    public function checkPassword($password){
+        $salt = $this->salt;
 
-        return openssl_digest($password.$salt, 'sha512') === $this->$passwordHash;
+        return openssl_digest($password.$salt, 'sha512') === $this->passwordHash;
     }
 
     /**
      * @return string
      */
     public function getUrlPath(){
-        return str_replace(' ', '-', strtolower($this->$title));
+        return str_replace(' ', '-', strtolower($this->title));
     }
 
     /**
      * @return string
      */
     public function getEmail(){
-        return $this->$email;
+        return $this->email;
     }
 
     /**
-     * @return string
+     * @return self
      */
-    public function setEmail(String $email){
-        $this->$email = $email;
+    public function setEmail($email){
+        $this->email = $email;
 
-        return $this->$email;
+        return $this;
     }
 
     /**
      * @return string
      */
     public function getFirstName(){
-        return $this->$firstName;
+        return $this->firstName;
     }
 
     /**
-     * @return string
+     * @return self
      */
-    public function setFirstName(String $firstName){
-        $this->$firstName = $firstName;
+    public function setFirstName($firstName){
+        $this->firstName = $firstName;
 
-        return $this->firstName;
+        return $this;
     }
 
     /**
      * @return string
      */
     public function getLastName(){
-        return $this->$lastName;
+        return $this->lastName;
     }
 
     /**
-     * @return string
+     * @return self
      */
-    public function setLastName(String $lastName){
-        $this->$lastName = $lastName;
+    public function setLastName($lastName){
+        $this->lastName = $lastName;
 
-        return $lastName;
+        return $this;
     }
 
     /**
      * @return string
      */
     public function getGender(){
-        return $this->$gender;
+        return $this->gender;
     }
 
     /**
-     * @return string
+     * @return self
      */
-    public function setGender(String $gender){
+    public function setGender($gender){
         $enum = array('m', 'f');
 
         if(!in_array($gender, $enum)){
             return false;
         }
 
-        $this->$gender = $gender;
+        $this->gender = $gender;
 
-        return $this->$gender;
+        return $this;
     }
 
     /**
      * @return string
      */
     protected function getSalt(){
-        return $this->$salt;
+        return $this->salt;
     }
 
     /**
      * @return string
      */
     protected function getPasswordHash(){
-        return $this->$passwordHash;
+        return $this->passwordHash;
     }
 }
