@@ -1,3 +1,7 @@
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
+
+bundles:
+    type:     rest
+    resource: AppBundle\Controller\API\v1\BundlesController

@@ -31,20 +31,32 @@ class ContentPage
     /**
      * @var string
      */
-    protected $url_path;
+    protected $urlPath;
 
+    /**
+     * @return integer
+     */
     public function getID(){
         return $this->$id;
     }
 
+    /**
+     * @return string
+     */
     public function getTitle(){
         return $this->$title;
     }
 
+    /**
+     * @return string
+     */
     public function getBody(){
         return $this->$body;
     }
 
+    /**
+     * @return string
+     */
     public function getUrlPath(){
         return str_replace(' ', '-', strtolower($this->$title));
     }
