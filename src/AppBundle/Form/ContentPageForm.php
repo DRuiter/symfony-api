@@ -12,7 +12,7 @@ class ContentPageForm extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver){
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\User',
+            'data_class' => 'AppBundle\Entity\ContentPageEntity',
         ));
     }
 
@@ -28,10 +28,10 @@ class ContentPageForm extends AbstractType
     public function newAction(Request $request){
         $contentPage = new ContentPageEntity();
 
-        $form = $this->createFormBuilder($contentPage)
-            ->add('title', 'text', array('required' => true))
-            ->add('body', 'textarea', array('required' => true))
-            ->add('save', 'submit', array('label' => 'Create Content Page'))
+        $builder = $this->createFormBuilder($contentPage);
+
+        $form = $this
+            ->buildForm($builder, array())
             ->getForm();
 
         $form->handleRequest($request);

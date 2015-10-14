@@ -2,9 +2,11 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
- * @Entity
- * @Table(name="contentpages")
+ * @ORM\Entity
+ * @ORM\Table(name="contentpages")
  */
 class ContentPageEntity
 {
@@ -18,7 +20,7 @@ class ContentPageEntity
 
     /**
      * @var string
-     * @ORM\Column(type="string", length="100", unique=true)
+     * @ORM\Column(type="string", length=100, unique=true)
      */
     protected $title;
 
@@ -68,7 +70,7 @@ class ContentPageEntity
      */
     public function setBody(string $body){
         $this->body = $body;
-        
+
         return $this;
     }
 

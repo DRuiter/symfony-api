@@ -2,6 +2,18 @@ app:
     resource: "@AppBundle/Controller/"
     type:     annotation
 
-bundles:
+users:
     type:     rest
-    resource: AppBundle\Controller\API\v1\BundlesController
+    resource: AppBundle\Controller\API\v1\UsersController
+
+contentpages:
+    type:     rest
+    resource: AppBundle\Controller\API\v1\ContentPagesController
+
+batch:
+    type:     rest
+    resource: AppBundle\Controller\API\v1\BatchController
+
+settings:
+    type:     rest
+    resource: AppBundle\Controller\API\v1\SettingsController

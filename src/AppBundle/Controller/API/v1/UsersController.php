@@ -28,7 +28,7 @@ class UsersController extends FOSRestController
     /**
      * @Get("/api/v1.0/user/{id}")
      */
-    public function getUser(Request $request, $id){
+    public function getUserByID(Request $request, $id){
         return new Response('<html><body>'.$slug.'</body></html>');
     }
 }

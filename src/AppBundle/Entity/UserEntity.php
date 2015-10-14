@@ -2,9 +2,11 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
- * @Entity
- * @Table(name="users")
+ * @ORM\Entity
+ * @ORM\Table(name="users")
  */
 class UserEntity
 {
@@ -18,7 +20,7 @@ class UserEntity
 
     /**
      * @var string
-     * @ORM\Column(type="string", length="254", unique=true)
+     * @ORM\Column(type="string", length=254, unique=true)
      * 254 characters because http://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690
      */
     protected $email;

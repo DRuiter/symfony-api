@@ -10,7 +10,9 @@ use FOS\RestBundle\Controller\Annotations\Get;
 
 use JMS\Serializer\SerializationContext;
 
-class ContentPageController extends FOSRestController
+use AppBundle\Entity\ContentPageEntity;
+
+class ContentPagesController extends FOSRestController
 {
     /**
      * @Get("/api/v1.0/contentpages/")
@@ -29,6 +31,19 @@ class ContentPageController extends FOSRestController
      * @Get("/api/v1.0/contentpage/{id}")
      */
     public function getContentPage(Request $request, $id){
-        return new Response('<html><body>'.$slug.'</body></html>');
+        $em = $this->getDoctrine()->getManager();
+
+        if(!isset($id)){
+            //Handle Exception
+            var_dump($id);
+        }
+
+        $contentPage = $em->find('AppBundle:ContentPageEntity', $id);
+
+        $view = $this
+                    ->view($contentPage, 200)
+                    ->setFormat('json');
+
+        return $this->handleView($view);
     }
 }
