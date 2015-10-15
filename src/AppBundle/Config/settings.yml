@@ -1,0 +1,3 @@
+google:
+    tracking_id: 'sometrackingID'
+    some_other_key: 'someOtherValue'
