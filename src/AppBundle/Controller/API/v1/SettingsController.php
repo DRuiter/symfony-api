@@ -14,12 +14,16 @@ use JMS\Serializer\SerializationContext;
 class SettingsController extends FOSRestController
 {
     /**
+     * @var object
+     */
+    private $settings;
+
+    /**
      * @Get("/api/v1.0/settings/")
      * @return array
      */
     public function getSettings(){
-        $yaml = new Parser();
-        $settings = $yaml->parse(file_get_contents(__DIR__.'/../../../Config/settings.yml'));
+        $settings = $this->parseSettings();
 
         $view = $this
                     ->view($settings, 200)
@@ -32,8 +36,7 @@ class SettingsController extends FOSRestController
      * @Get("/api/v1.0/settings/google/tracking_id")
      */
     public function getGoogleAnalyticsID(){
-        $yaml = new Parser();
-        $settings = $yaml->parse(file_get_contents(__DIR__.'/../../../Config/settings.yml'));
+        $settings = $this->parseSettings();
 
         $trackingID = array('tracking_id' => $settings['google']['tracking_id']);
 
@@ -42,5 +45,21 @@ class SettingsController extends FOSRestController
                     ->setFormat('json');
 
         return $this->handleView($view);
+    }
+
+    /**
+     * @return object
+     */
+    protected function parseSettings(){
+        if(isset($this->settings)){
+            return $this->settings;
+        }
+
+        $yaml = new Parser();
+        $settings = $yaml->parse(file_get_contents(__DIR__.'/../../../Config/settings.yml'));
+
+        $this->settings = $settings;
+
+        return $this->settings;
     }
 }

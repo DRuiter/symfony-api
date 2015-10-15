@@ -10,25 +10,50 @@ use FOS\RestBundle\Controller\Annotations\Get;
 
 use JMS\Serializer\SerializationContext;
 
+use AppBundle\Entity\UserEntity;
+
 class UsersController extends FOSRestController
 {
     /**
      * @Get("/api/v1.0/users/")
      * @return array
      */
-    public function getAllUsers(Request $request){
-        $data = array(1,2,3,4, 'wat' => 'wut');
+    public function getAllUsers(){
+        $em = $this->getDoctrine()->getManager();
+
+        $users = $em->getRepository('AppBundle:UserEntity')->findAll();
+
+        if(!$users){
+            $users = array();
+        }
+
         $view = $this
-                    ->view($data, 200)
+                    ->view($users, 200)
                     ->setFormat('json');
 
         return $this->handleView($view);
     }
 
     /**
-     * @Get("/api/v1.0/user/{id}")
+     * @Get("/api/v1.0/users/{id}")
      */
-    public function getUserByID(Request $request, $id){
-        return new Response('<html><body>'.$slug.'</body></html>');
+    public function getUserByID($id){
+        $em = $this->getDoctrine()->getManager();
+
+        if(!isset($id) || !is_numeric($id)){
+            throw $this->createNotFoundException('Unspecified ID');
+        }
+
+        $user = $em->find('AppBundle:UserEntity', $id);
+
+        if(!$user){
+            $user = (object) array();
+        }
+
+        $view = $this
+                    ->view($user, 200)
+                    ->setFormat('json');
+
+        return $this->handleView($view);
     }
 }

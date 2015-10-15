@@ -35,7 +35,7 @@ class ContentPagesController extends FOSRestController
     }
 
     /**
-     * @Get("/api/v1.0/contentpage/{id}")
+     * @Get("/api/v1.0/contentpages/{id}")
      */
     public function getContentPage($id){
         $em = $this->getDoctrine()->getManager();
