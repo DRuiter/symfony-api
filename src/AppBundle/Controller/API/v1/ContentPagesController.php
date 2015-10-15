@@ -18,10 +18,17 @@ class ContentPagesController extends FOSRestController
      * @Get("/api/v1.0/contentpages/")
      * @return array
      */
-    public function getAllContentPages(Request $request){
-        $data = array(1,2,3,4, 'wat' => 'wut');
+    public function getAllContentPages(){
+        $em = $this->getDoctrine()->getManager();
+
+        $contentPages = $em->getRepository('AppBundle:ContentPageEntity')->findAll();
+
+        if(!$contentPages){
+            $contentPages = array();
+        }
+
         $view = $this
-                    ->view($data, 200)
+                    ->view($contentPages, 200)
                     ->setFormat('json');
 
         return $this->handleView($view);
@@ -30,15 +37,18 @@ class ContentPagesController extends FOSRestController
     /**
      * @Get("/api/v1.0/contentpage/{id}")
      */
-    public function getContentPage(Request $request, $id){
+    public function getContentPage($id){
         $em = $this->getDoctrine()->getManager();
 
-        if(!isset($id)){
-            //Handle Exception
-            var_dump($id);
+        if(!isset($id) || !is_numeric($id)){
+            throw $this->createNotFoundException('Unspecified ID');
         }
 
         $contentPage = $em->find('AppBundle:ContentPageEntity', $id);
+
+        if(!$contentPage){
+            $contentPage = (object) array();
+        }
 
         $view = $this
                     ->view($contentPage, 200)

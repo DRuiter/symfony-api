@@ -57,7 +57,7 @@ class UserEntity
     protected $passwordHash;
 
     /**
-     * @return self
+     * @return UserEntity
      */
     public function setPassword($password){
         if(!isset($this->salt)){
@@ -114,7 +114,7 @@ class UserEntity
     }
 
     /**
-     * @return self
+     * @return UserEntity
      */
     public function setEmail($email){
         $this->email = $email;
@@ -130,7 +130,7 @@ class UserEntity
     }
 
     /**
-     * @return self
+     * @return UserEntity
      */
     public function setFirstName($firstName){
         $this->firstName = $firstName;
@@ -146,7 +146,7 @@ class UserEntity
     }
 
     /**
-     * @return self
+     * @return UserEntity
      */
     public function setLastName($lastName){
         $this->lastName = $lastName;
@@ -162,7 +162,7 @@ class UserEntity
     }
 
     /**
-     * @return self
+     * @return UserEntity
      */
     public function setGender($gender){
         $enum = array('m', 'f');
@@ -188,5 +188,14 @@ class UserEntity
      */
     protected function getPasswordHash(){
         return $this->passwordHash;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId(){
+        return $this->id;
     }
 }
