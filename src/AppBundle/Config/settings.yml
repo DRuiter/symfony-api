@@ -1,3 +1,9 @@
-google:
-    tracking_id: 'sometrackingID'
-    some_other_key: 'someOtherValue'
+public:
+    google:
+        tracking_id: 'sometrackingID'
+        some_other_key: 'someOtherValue'
+
+private:
+    linkedin:
+        client_id: 'someClientID'
+        client_secret: 'someClientSecret'

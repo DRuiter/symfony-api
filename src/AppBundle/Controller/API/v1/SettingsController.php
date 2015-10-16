@@ -50,9 +50,9 @@ class SettingsController extends FOSRestController
     /**
      * @return object
      */
-    protected function parseSettings(){
+    public function getPublicSettings(){
         if(isset($this->settings)){
-            return $this->settings;
+            return $this->settings['public'];
         }
 
         $yaml = new Parser();
@@ -60,6 +60,19 @@ class SettingsController extends FOSRestController
 
         $this->settings = $settings;
 
-        return $this->settings;
+        return $this->settings['public'];
+    }
+
+    public function getPrivateSettings(){
+        if(isset($this->settings)){
+            return $this->settings['private'];
+        }
+
+        $yaml = new Parser();
+        $settings = $yaml->parse(file_get_contents(__DIR__.'/../../../Config/settings.yml'));
+
+        $this->settings = $settings;
+
+        return $this->settings['private'];
     }
 }

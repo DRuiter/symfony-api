@@ -24,6 +24,7 @@ class ContentPagesController extends FOSRestController
         $contentPages = $em->getRepository('AppBundle:ContentPageEntity')->findAll();
 
         if(!$contentPages){
+            //TODO Implement proper error handling with status codes
             $contentPages = array();
         }
 
@@ -47,6 +48,7 @@ class ContentPagesController extends FOSRestController
         $contentPage = $em->find('AppBundle:ContentPageEntity', $id);
 
         if(!$contentPage){
+            //TODO Implement proper error handling with status codes
             $contentPage = (object) array();
         }
 
