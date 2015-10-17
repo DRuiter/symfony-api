@@ -4,9 +4,17 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="users")
+ * @UniqueEntity("email")
+ * @ExclusionPolicy("all")
  */
 class UserEntity
 {
@@ -14,7 +22,8 @@ class UserEntity
      * @var integer
      * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @Expose
      */
     protected $id;
 
@@ -22,24 +31,52 @@ class UserEntity
      * @var string
      * @ORM\Column(type="string", length=254, unique=true)
      * 254 characters because http://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 254,
+     *      minMessage = "Your email must be at least {{ limit }} characters long",
+     *      maxMessage = "Your email cannot be longer than {{ limit }} characters"
+     * )
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email.",
+     *     checkMX = true,
+     *     checkHost = true
+     * )
+     * @Expose
      */
     protected $email;
 
     /**
      * @var string
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 2
+     * )
+     * @Expose
      */
     protected $firstName;
 
     /**
      * @var string
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 2
+     * )
+     * @Expose
      */
     protected $lastName;
 
     /**
      * @var string
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 1
+     * )
      */
     protected $gender;
 
@@ -87,8 +124,7 @@ class UserEntity
             return $randomString;
         }
 
-        $salt = generateRandomString(16);
-        $this->salt = $salt;
+        $this->salt = generateRandomString(16);
 
         return $this->salt;
     }

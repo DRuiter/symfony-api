@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -21,12 +22,21 @@ class ContentPageEntity
     /**
      * @var string
      * @ORM\Column(type="string", length=100, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 100
+     * )
      */
     protected $title;
 
     /**
      * @var string
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 1
+     * )
      */
     protected $body;
 
@@ -50,9 +60,9 @@ class ContentPageEntity
     }
 
     /**
-     * @return self
+     * @return ContentPageEntity
      */
-    public function setTitle(string $title){
+    public function setTitle($title){
         $this->title = $title;
 
         return $this;
@@ -66,9 +76,9 @@ class ContentPageEntity
     }
 
     /**
-     * @return self
+     * @return ContentPageEntity
      */
-    public function setBody(string $body){
+    public function setBody($body){
         $this->body = $body;
 
         return $this;

@@ -53,12 +53,17 @@ class UsersController extends FOSRestController
 
         if(!$user){
             //TODO Implement proper error handling with status codes
-            $user = (object) array();
-        }
-
-        $view = $this
+            $error = array('error' => 'No user found with ID: '.$id);
+            $view = $this
+                    ->view($error, 400)
+                    ->setFormat('json');
+        } else {
+            $view = $this
                     ->view($user, 200)
                     ->setFormat('json');
+        }
+
+
 
         return $this->handleView($view);
     }

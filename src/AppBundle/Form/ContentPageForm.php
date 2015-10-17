@@ -16,6 +16,12 @@ class ContentPageForm extends AbstractType
         ));
     }
 
+    public function getForm(FormBuilderInterface $builder){
+        $builder = $this->buildForm($builder, array());
+
+        return $builder->getForm();
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options){
         $builder
             ->add('title', 'text', array('required' => true))
