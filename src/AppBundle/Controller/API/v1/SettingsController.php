@@ -9,8 +9,6 @@ use Symfony\Component\Yaml\Parser;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\Get;
 
-use JMS\Serializer\SerializationContext;
-
 class SettingsController extends FOSRestController
 {
     /**
@@ -23,7 +21,7 @@ class SettingsController extends FOSRestController
      * @return array
      */
     public function getSettings(){
-        $settings = $this->parseSettings();
+        $settings = $this->getPublicSettings();
 
         $view = $this
                     ->view($settings, 200)
@@ -36,7 +34,7 @@ class SettingsController extends FOSRestController
      * @Get("/api/v1.0/settings/google/tracking_id")
      */
     public function getGoogleAnalyticsID(){
-        $settings = $this->parseSettings();
+        $settings = $this->getPublicSettings();
 
         $trackingID = array('tracking_id' => $settings['google']['tracking_id']);
 
@@ -63,6 +61,9 @@ class SettingsController extends FOSRestController
         return $this->settings['public'];
     }
 
+    /**
+     * @return object
+     */
     public function getPrivateSettings(){
         if(isset($this->settings)){
             return $this->settings['private'];

@@ -61,16 +61,12 @@ class FormController extends FOSRestController
 
             return $this->handleView($view);
         } else {
-            $validator        = $this->get('validator');
             $errorValidator   = new ErrorValidation();
-
-            $errors = $validator->validate($user);
 
             $view = $this
                       ->view(array(
                           'created'         => false,
-                          'form-errors'     => $errorValidator->getErrorMessages($form),
-                          'entity-errors'   => $errors
+                          'errors'          => $errorValidator->getErrorMessages($form)
                       ), 400)
                       ->setFormat('json');
 
@@ -97,7 +93,7 @@ class FormController extends FOSRestController
     public function postContentPageForm(Request $request){
         $contentPage       = new ContentPageEntity();
         $contentPageForm   = new ContentPageForm();
-        $builder    = $this->createFormBuilder($contentPage);
+        $builder           = $this->createFormBuilder($contentPage);
 
         $form = $contentPageForm
               ->getForm($builder)
@@ -117,16 +113,12 @@ class FormController extends FOSRestController
 
             return $this->handleView($view);
         } else {
-            $validator        = $this->get('validator');
             $errorValidator   = new ErrorValidation();
-
-            $errors = $validator->validate($contentPage);
 
             $view = $this
                       ->view(array(
-                          'created'         => false,
-                          'form-errors'     => $errorValidator->getErrorMessages($form),
-                          'entity-errors'   => $errors
+                          'created'    => false,
+                          'errors'     => $errorValidator->getErrorMessages($form)
                       ), 400)
                       ->setFormat('json');
 

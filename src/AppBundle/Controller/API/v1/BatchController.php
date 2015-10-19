@@ -18,15 +18,16 @@ class BatchController extends FOSRestController
      * @Post("/api/v1.0/batch/")
      * @return array
      */
-    public function postBundle(Request $request){
+    public function postBatch(Request $request){
         $kernel    = $this->container->get('http_kernel');
         $requests  = array();
         $responses = array();
         $parse     = $request->request->all();
 
-        foreach($parse as $route => $parameters){
+        foreach($parse as $parameters){
+
             $req = Request::create(
-                $route,
+                $parameters['route'],
                 $parameters['method'],
                 (isset($parameters['params']) ? $parameters['params'] : array()),
                 (isset($parameters['cookie']) ? $parameters['files'] : $request->cookies->all()),
@@ -39,16 +40,27 @@ class BatchController extends FOSRestController
                 $req->setSession($request->getSession());
             }
 
-            $requests[$route] = $req;
+            if(!isset($requests[$parameters['method']])){
+                $requests[$parameters['method']] = array();
+            }
+
+            $requests[$parameters['method']][$parameters['route']] = $req;
         }
 
-        foreach($requests as $route => $req){
-            $res = $kernel->handle($req, HttpKernelInterface::SUB_REQUEST);
-            $responses[$route] = array(
-                'code' => $res->getStatusCode(),
-                'date' => $res->getDate(),
-                'content' => $res->getContent()
-            );
+        foreach($requests as $method => $value){
+            foreach($value as $route => $req){
+                if(!isset($responses[$method])){
+                    $responses[$method] = array();
+                }
+
+                $res = $kernel->handle($req, HttpKernelInterface::SUB_REQUEST);
+
+                $responses[$method][$route] = array(
+                    'code' => $res->getStatusCode(),
+                    'date' => $res->getDate(),
+                    'content' => $res->getContent()
+                );
+            }
         }
 
         $view = $this

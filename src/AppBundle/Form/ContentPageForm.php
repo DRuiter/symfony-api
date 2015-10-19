@@ -26,34 +26,15 @@ class ContentPageForm extends AbstractType
         $builder
             ->add('title', 'text', array('required' => true))
             ->add('body', 'textarea', array('required' => true))
-            ->add('save', 'submit', array('label' => 'Create Content Page'));
+            ->add('save', 'submit', array(
+                'label' => 'Create Content Page',
+                'attr'  => array('data-target' => 'forms/contentpage')
+            ));
 
         return $builder;
     }
 
-    public function newAction(Request $request){
-        $contentPage = new ContentPageEntity();
-
-        $builder = $this->createFormBuilder($contentPage);
-
-        $form = $this
-            ->buildForm($builder, array())
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            // ... perform some action, such as saving the task to the database
-
-            return $this->redirectToRoute('is-valid');
-        }
-
-        return $this->render('default/default-form.html.twig', array(
-            'form' => $form->createView(),
-        ));
-    }
-
     public function getName(){
-        return 'user';
+        return 'content-page';
     }
 }

@@ -45,7 +45,10 @@ class UserForm extends AbstractType
                 'choices'   => array('m' => 'Male', 'f' => 'Female'),
                 'required'  => true
             ))
-            ->add('save', 'submit', array('label' => 'Create User'));
+            ->add('save', 'submit', array(
+                'label' => 'Create User',
+                'attr'  => array('data-target' => 'forms/user')
+            ));
 
         return $builder;
     }

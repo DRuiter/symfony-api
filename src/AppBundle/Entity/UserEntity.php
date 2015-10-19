@@ -72,11 +72,7 @@ class UserEntity
     /**
      * @var string
      * @ORM\Column(type="text")
-     * @Assert\NotBlank()
-     * @Assert\Length(
-     *      min = 1,
-     *      max = 1
-     * )
+     * @Assert\Choice({"m", "f"})
      */
     protected $gender;
 
