@@ -1,18 +1,15 @@
 <?php
-namespace AppBundle\Form;
+namespace AppBundle\Form\API;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use AppBundle\Entity\ContentPageEntity;
-
-class ContentPageForm extends AbstractType
+class APIContentPageForm extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver){
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\ContentPageEntity',
+            'data_class'        => 'AppBundle\Entity\ContentPageEntity'
         ));
     }
 
@@ -26,16 +23,12 @@ class ContentPageForm extends AbstractType
         $builder
             ->add('title', 'text', array('required' => true))
             ->add('body', 'textarea', array('required' => true))
-            ->add('willBeDeletedOnNull', 'text')
-            ->add('save', 'submit', array(
-                'label' => 'Create Content Page',
-                'attr'  => array('data-target' => 'forms/contentpage')
-            ));
+            ->add('willBeDeletedOnNull', 'text');
 
         return $builder;
     }
 
     public function getName(){
-        return 'ContentPageForm';
+        return 'APIContentPageForm';
     }
 }

@@ -1,12 +1,9 @@
 <?php
 namespace AppBundle\Form;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use AppBundle\Entity\UserEntity;
 
 class UserForm extends AbstractType
 {
@@ -29,7 +26,7 @@ class UserForm extends AbstractType
                 'invalid_message' => 'The email fields must match.',
                 'required' => true,
                 'first_options'  => array('label' => 'E-Mail'),
-                'second_options' => array('label' => 'Repeat E-Mail'),
+                'second_options' => array('label' => 'Repeat E-Mail')
             ))
             ->add('password', 'repeated', array(
                 'type' => 'password',
@@ -54,6 +51,6 @@ class UserForm extends AbstractType
     }
 
     public function getName(){
-        return 'user';
+        return 'UserForm';
     }
 }

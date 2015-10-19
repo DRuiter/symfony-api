@@ -1,18 +1,15 @@
 <?php
-namespace AppBundle\Form;
+namespace AppBundle\Form\API;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use AppBundle\Entity\ContentPageEntity;
-
-class ContentPageForm extends AbstractType
+class APIUserForm extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver){
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\ContentPageEntity',
+            'data_class'        => 'AppBundle\Entity\UserEntity'
         ));
     }
 
@@ -24,18 +21,17 @@ class ContentPageForm extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options){
         $builder
-            ->add('title', 'text', array('required' => true))
-            ->add('body', 'textarea', array('required' => true))
-            ->add('willBeDeletedOnNull', 'text')
-            ->add('save', 'submit', array(
-                'label' => 'Create Content Page',
-                'attr'  => array('data-target' => 'forms/contentpage')
+            ->add('email', 'email', array())
+            ->add('firstName', 'text', array())
+            ->add('lastName', 'text', array())
+            ->add('gender', 'choice', array(
+                'choices'   => array('m' => 'Male', 'f' => 'Female')
             ));
 
         return $builder;
     }
 
     public function getName(){
-        return 'ContentPageForm';
+        return 'APIUserForm';
     }
 }

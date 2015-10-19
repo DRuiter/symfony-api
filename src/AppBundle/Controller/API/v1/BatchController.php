@@ -30,7 +30,7 @@ class BatchController extends FOSRestController
                 $parameters['route'],
                 $parameters['method'],
                 (isset($parameters['params']) ? $parameters['params'] : array()),
-                (isset($parameters['cookie']) ? $parameters['files'] : $request->cookies->all()),
+                (isset($parameters['cookie']) ? $parameters['cookie'] : $request->cookies->all()),
                 (isset($parameters['files']) ? $parameters['files'] : $request->files->all()),
                 $request->server->all(),
                 (isset($parameters['body']) ? $parameters['body'] : null)
@@ -53,18 +53,18 @@ class BatchController extends FOSRestController
                     $responses[$method] = array();
                 }
 
-                $res = $kernel->handle($req, HttpKernelInterface::SUB_REQUEST);
+                $res = $kernel->handle($req, HttpKernelInterface::SUB_REQUEST, true);
 
                 $responses[$method][$route] = array(
                     'code' => $res->getStatusCode(),
                     'date' => $res->getDate(),
-                    'content' => $res->getContent()
+                    'content' => json_decode($res->getContent(), true)
                 );
             }
         }
 
         $view = $this
-                    ->view($responses, 200)
+                    ->view($responses, Response::HTTP_OK)
                     ->setFormat('json');
 
         return $this->handleView($view);

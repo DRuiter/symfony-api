@@ -14,6 +14,7 @@ use FOS\RestBundle\Controller\Annotations\Delete;
 use JMS\Serializer\SerializationContext;
 
 use AppBundle\Entity\ContentPageEntity;
+use AppBundle\Form\API\APIContentPageForm;
 use AppBundle\Form\ContentPageForm;
 
 class ContentPagesController extends FOSRestController
@@ -32,7 +33,7 @@ class ContentPagesController extends FOSRestController
         }
 
         $view = $this
-                    ->view($contentPages, 200)
+                    ->view($contentPages, Response::HTTP_OK)
                     ->setFormat('json');
 
         return $this->handleView($view);
@@ -56,11 +57,11 @@ class ContentPagesController extends FOSRestController
             );
 
             $view = $this
-                        ->view($error, 404)
+                        ->view($error, Response::HTTP_NOT_FOUND)
                         ->setFormat('json');
         } else {
             $view = $this
-                        ->view($contentPage, 200)
+                        ->view($contentPage, Response::HTTP_OK)
                         ->setFormat('json');
         }
 
@@ -70,13 +71,13 @@ class ContentPagesController extends FOSRestController
     /**
      * @Put("/api/v1.0/contentpages/{id}")
      */
-    public function putUserByID(Request $request, $id){
+    public function putContentPageByID(Request $request, $id){
         $em = $this->getDoctrine()->getManager();
-        $contentPageForm   = new ContentPageForm();
+        $contentPageForm   = new APIContentPageForm();
 
         if(!isset($id) || !is_numeric($id)){
             $view = $this
-                    ->view(array('error' => 'Unspecified or incorrect ID'), 400)
+                    ->view(array('error' => 'Unspecified or incorrect ID'), Response::HTTP_BAD_REQUEST)
                     ->setFormat('json');
 
             return $this->handleView($view);
@@ -86,7 +87,7 @@ class ContentPagesController extends FOSRestController
 
         if(!$contentpage){
             $view = $this
-                    ->view(array('error' => 'Cannot find Content Page with ID: '.$id), 404)
+                    ->view(array('error' => 'Cannot find Content Page with ID: '.$id), Response::HTTP_NOT_FOUND)
                     ->setFormat('json');
 
             return $this->handleView($view);
@@ -96,30 +97,37 @@ class ContentPagesController extends FOSRestController
         // Switched to manually patching the entity, for some reason the form was
         // seen as invalid, even though no errors were returned in $form->getErrors(true)
         // or any other errors from the validator for that matter.
-        $updates = $request->request->all();
+        if($request->request->get('APIContentPageForm')){
+            $updates = $request->request->get('APIContentPageForm');
+        } else {
+            $updates = $request->request->all();
+        }
 
         if(isset($updates['title'])) $contentpage->setTitle($updates['title']);
         if(isset($updates['body'])) $contentpage->setBody($updates['body']);
+        if(isset($updates['willBeDeletedOnNull'])) $contentpage->setWillBeDeletedOnNull($updates['willBeDeletedOnNull']);
 
         $validator  = $this->container->get('validator');
         $errors     = $validator->validate($contentpage);
 
         if(count($errors) <= 0){
-            $em->merge($contentpage);
+            $em->persist($contentpage);
             $em->flush();
 
             $view = $this
                         ->view(array(
                             'updated'   => true,
-                            'id'        => $contentpage->getId()
-                        ), 200)
+                            'id'        => $contentpage->getId(),
+                            'wat'       => $updates,
+                            'wit'       => $request->query->all()
+                        ), Response::HTTP_OK)
                         ->setFormat('json');
         } else {
             $view = $this
                         ->view(array(
                             'updated'   => false,
                             'errors'    => $errors
-                        ), 400)
+                        ), Response::HTTP_BAD_REQUEST)
                         ->setFormat('json');
         }
 
@@ -131,11 +139,11 @@ class ContentPagesController extends FOSRestController
      */
     public function deleteContentPageByID($id){
         $em                 = $this->getDoctrine()->getManager();
-        $contentPageForm    = new ContentPageForm();
+        $contentPageForm    = new APIContentPageForm();
 
         if(!isset($id) || !is_numeric($id)){
             $view = $this
-                    ->view(array('error' => 'Unspecified or incorrect ID'), 400)
+                    ->view(array('error' => 'Unspecified or incorrect ID'), Response::HTTP_BAD_REQUEST)
                     ->setFormat('json');
 
             return $this->handleView($view);
@@ -145,7 +153,7 @@ class ContentPagesController extends FOSRestController
 
         if(!$contentpage){
             $view = $this
-                    ->view(array('error' => 'Cannot find contentpage with ID: '.$id), 404)
+                    ->view(array('error' => 'Cannot find contentpage with ID: '.$id), Response::HTTP_NOT_FOUND)
                     ->setFormat('json');
         } else {
             $em->remove($contentpage);
@@ -155,7 +163,7 @@ class ContentPagesController extends FOSRestController
                         ->view(array(
                             'deleted'   => true,
                             'id'        => $id
-                        ), 200)
+                        ), Response::HTTP_OK)
                         ->setFormat('json');
         }
 

@@ -23,6 +23,7 @@
         </div>
 
         <div id="controls">
+            <div id="batch-queue"></div>
             <button id="batch-mode">Enable Batch Mode</button>
         <div>
     </div>
@@ -65,7 +66,33 @@
     #batch-mode {
         width:40%;
         height:100%;
-        margin-left:30%;
+        float:left;
+    }
+
+    #batch-queue {
+        width:30%;
+        height:100%;
+        background:white;
+        float:left;
+    }
+
+    .modal {
+        top:15%;
+        left:30%;
+        width:40%;
+        height:40%;
+        background:white;
+        position:absolute;
+        box-shadow:0px 0px 3px #333;
+    }
+
+    .close-modal {
+        width:15px;
+        height:15px;
+        line-height:15px;
+        text-align:center;
+        cursor:pointer;
+        float:right;
     }
 </style>
 {% endblock %}
