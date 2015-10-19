@@ -113,6 +113,18 @@ $(function(){
             var data = $(this).serialize(),
                 target = $(this).find('button[type=submit]').attr('data-target');
 
+            if(batchMode){
+                batchQueue.push({
+                    route: '/'+target,
+                    method: 'POST',
+                    params: data
+                });
+
+                renderBatchQueue();
+
+                return false;
+            }
+
             $.ajax(host + target, {
                 method: 'POST',
                 data: data

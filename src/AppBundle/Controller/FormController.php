@@ -56,7 +56,7 @@ class FormController extends FOSRestController
                       ->view(array(
                           'created'   => true,
                           'id'        => $user->getId()
-                      ), 200)
+                      ), Response::HTTP_OK)
                       ->setFormat('json');
 
             return $this->handleView($view);
@@ -66,8 +66,8 @@ class FormController extends FOSRestController
             $view = $this
                       ->view(array(
                           'created'         => false,
-                          'errors'          => $errorValidator->getErrorMessages($form)
-                      ), 400)
+                          'errors'          => $errorValidator->getFormErrorMessages($form)
+                      ), Response::HTTP_BAD_REQUEST)
                       ->setFormat('json');
 
             return $this->handleView($view);
@@ -93,11 +93,10 @@ class FormController extends FOSRestController
     public function postContentPageForm(Request $request){
         $contentPage       = new ContentPageEntity();
         $contentPageForm   = new ContentPageForm();
-        $builder           = $this->createFormBuilder($contentPage);
 
-        $form = $contentPageForm
-              ->getForm($builder)
-              ->handleRequest($request);
+        $form = $this
+                ->createForm($contentPageForm, $contentPage)
+                ->submit($request->request->all());
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -108,7 +107,7 @@ class FormController extends FOSRestController
                       ->view(array(
                           'created'   => true,
                           'id'        => $contentPage->getId()
-                      ), 200)
+                      ), Response::HTTP_OK)
                       ->setFormat('json');
 
             return $this->handleView($view);
@@ -118,8 +117,8 @@ class FormController extends FOSRestController
             $view = $this
                       ->view(array(
                           'created'    => false,
-                          'errors'     => $errorValidator->getErrorMessages($form)
-                      ), 400)
+                          'errors'     => $errorValidator->getFormErrorMessages($form)
+                      ), Response::HTTP_BAD_REQUEST)
                       ->setFormat('json');
 
             return $this->handleView($view);
