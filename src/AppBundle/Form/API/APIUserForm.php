@@ -26,7 +26,8 @@ class APIUserForm extends AbstractType
             ->add('lastName', 'text', array())
             ->add('gender', 'choice', array(
                 'choices'   => array('m' => 'Male', 'f' => 'Female')
-            ));
+            ))
+            ->add('password', 'password', array('mapped' => false));
 
         return $builder;
     }

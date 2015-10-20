@@ -105,7 +105,6 @@ class ContentPagesController extends FOSRestController
 
         if(isset($updates['title'])) $contentpage->setTitle($updates['title']);
         if(isset($updates['body'])) $contentpage->setBody($updates['body']);
-        if(isset($updates['willBeDeletedOnNull'])) $contentpage->setWillBeDeletedOnNull($updates['willBeDeletedOnNull']);
 
         $validator  = $this->container->get('validator');
         $errors     = $validator->validate($contentpage);
@@ -130,6 +129,47 @@ class ContentPagesController extends FOSRestController
         }
 
         return $this->handleView($view);
+    }
+
+    /**
+     * @Post("/api/v1.0/contentpages/")
+     * @return object
+     */
+    public function postContentPage(Request $request){
+        $contentpage       = new ContentPageEntity();
+        $contentpageForm   = new APIContentPageForm();
+
+        $form = $this
+                    ->createForm($contentpageForm, $contentpage)
+                    // Using submit here, handleRequest invalidates the form
+                    // without any errors for some reason.
+                    ->submit($request->request->all());
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            $em->persist($contentpage);
+            $em->flush();
+
+            $view = $this
+                        ->view(array(
+                            'created'   => true,
+                            'id'        => $contentpage->getId()
+                        ), Response::HTTP_CREATED)
+                        ->setFormat('json');
+
+            return $this->handleView($view);
+        } else {
+            $errorValidation = new ErrorValidation();
+            $view = $this
+                        ->view(array(
+                            'created'   => false,
+                            'errors'    => $errorValidation->getFormErrorMessages($form)
+                        ), Response::HTTP_BAD_REQUEST)
+                        ->setFormat('json');
+
+            return $this->handleView($view);
+        }
     }
 
     /**

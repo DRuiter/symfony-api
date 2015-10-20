@@ -22,8 +22,7 @@ class APIContentPageForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options){
         $builder
             ->add('title', 'text', array('required' => true))
-            ->add('body', 'textarea', array('required' => true))
-            ->add('willBeDeletedOnNull', 'text');
+            ->add('body', 'textarea', array('required' => true));
 
         return $builder;
     }

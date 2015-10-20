@@ -44,12 +44,6 @@ class ContentPageEntity
 
     /**
      * @var string
-     * @ORM\Column(type="text")
-     */
-    protected $willBeDeletedOnNull;
-
-    /**
-     * @var string
      */
     protected $urlPath;
 
@@ -88,21 +82,6 @@ class ContentPageEntity
      */
     public function setBody($body){
         $this->body = $body;
-
-        return $this;
-    }
-    /**
-     * @return string
-     */
-    public function getWillBeDeletedOnNull(){
-        return $this->willBeDeletedOnNull;
-    }
-
-    /**
-     * @return ContentPageEntity
-     */
-    public function setWillBeDeletedOnNull($willBeDeletedOnNull){
-        $this->willBeDeletedOnNull = $willBeDeletedOnNull;
 
         return $this;
     }

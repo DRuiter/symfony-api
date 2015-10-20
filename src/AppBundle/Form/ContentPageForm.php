@@ -26,7 +26,6 @@ class ContentPageForm extends AbstractType
         $builder
             ->add('title', 'text', array('required' => true))
             ->add('body', 'textarea', array('required' => true))
-            ->add('willBeDeletedOnNull', 'text')
             ->add('save', 'submit', array(
                 'label' => 'Create Content Page',
                 'attr'  => array('data-target' => 'forms/contentpage')
