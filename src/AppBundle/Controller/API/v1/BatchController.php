@@ -26,7 +26,9 @@ class BatchController extends FOSRestController
 
         foreach($parse as $parameters){
             if(isset($parameters['params']) && is_string($parameters['params'])){
-                $parameters['params'] = unserialize($parameters['params']);
+                $arr = array();
+                parse_str($parameters['params'], $arr);
+                $parameters['params'] = $arr;
             }
 
             $req = Request::create(

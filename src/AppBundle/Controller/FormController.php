@@ -93,10 +93,11 @@ class FormController extends FOSRestController
     public function postContentPageForm(Request $request){
         $contentPage       = new ContentPageEntity();
         $contentPageForm   = new ContentPageForm();
+        $builder           = $this->createFormBuilder($contentPage);
 
-        $form = $this
-                ->createForm($contentPageForm, $contentPage)
-                ->submit($request->request->all());
+        $form = $contentPageForm
+              ->getForm($builder)
+              ->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

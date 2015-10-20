@@ -1,4 +1,21 @@
+$.fn.serializeObject = function() {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+
 $(function(){
+
     var host = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ':'+window.location.port + '/' : '/'),
         API  = host + 'api/v1.0/',
         batchMode       = false,
@@ -74,7 +91,6 @@ $(function(){
         if(batchMode){
             $(this).text('Handle Batch');
         } else {
-            console.log(API + 'batch/');
             $.ajax(API + 'batch/', {
                 method: 'POST',
                 data: JSON.stringify(batchQueue),
@@ -84,6 +100,7 @@ $(function(){
                 getAllUsers(renderUsers);
                 getAllContentPages(renderContentPages);
                 batchQueue = [];
+                renderBatchQueue();
                 console.log(res);
             })
             .fail(function(){
@@ -110,8 +127,9 @@ $(function(){
             evt.preventDefault();
             evt.returnValue = false;
 
-            var data = $(this).serialize(),
-                target = $(this).find('button[type=submit]').attr('data-target');
+            var $form   = $(this),
+                data    = $form.serialize(),
+                target  = $(this).find('button[type=submit]').attr('data-target');
 
             if(batchMode){
                 batchQueue.push({

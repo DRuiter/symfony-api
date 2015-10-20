@@ -117,9 +117,7 @@ class ContentPagesController extends FOSRestController
             $view = $this
                         ->view(array(
                             'updated'   => true,
-                            'id'        => $contentpage->getId(),
-                            'wat'       => $updates,
-                            'wit'       => $request->query->all()
+                            'id'        => $contentpage->getId()
                         ), Response::HTTP_OK)
                         ->setFormat('json');
         } else {
